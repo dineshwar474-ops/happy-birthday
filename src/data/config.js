@@ -6,7 +6,7 @@ export const CONFIG = {
   NICKNAME: "Mental",
   
   // Audio configuration
-  audioSrc: "/music/birthday.mp3",
+  audioSrc: "/music/Glass_Tides_-_Unwritten_Natasha_Bedingfield_Cover_(mp3.pm).mp3",
   
   // Optional final reveal toggle
   enableCreatorReveal: false,
