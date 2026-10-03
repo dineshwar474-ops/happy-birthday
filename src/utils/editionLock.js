@@ -48,6 +48,13 @@ export function isEditionUnlocked() {
 
   // If the target is in the future, it is locked
   if (Date.now() < targetTs) {
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.removeItem('wish_edition_unlocked');
+      } catch {
+        // ignore
+      }
+    }
     return false;
   }
 
