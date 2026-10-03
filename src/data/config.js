@@ -16,9 +16,9 @@ export const CONFIG = {
   editionUnlock: {
     // 24-hour format: 13 = 1 PM, 17 = 17 minutes (Today at 1:17 PM)
     targetHour: 13,
-    targetMinute: 23,
+    targetMinute: 25,
     targetSecond: 0,
-    timeDisplay: "1:17 PM",
+    timeDisplay: "1:25 PM",
 
     // Optional specific ISO date/time override (e.g. "2026-10-03T13:17:00")
     // Leave null to automatically lock till today at targetHour:targetMinute
