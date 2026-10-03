@@ -15,8 +15,8 @@ export function getUnlockTargetDate() {
     now.getFullYear(),
     now.getMonth(),
     now.getDate(),
-    config.targetHour ?? 23,
-    config.targetMinute ?? 11,
+    config.targetHour ?? 19,
+    config.targetMinute ?? 30,
     config.targetSecond ?? 0,
     0
   );
@@ -71,7 +71,7 @@ export function isEditionUnlocked() {
 }
 
 /**
- * Computes remaining time until 11:11 PM today.
+ * Computes remaining time until unlock today.
  */
 export function getTimeRemaining() {
   if (isEditionUnlocked()) {

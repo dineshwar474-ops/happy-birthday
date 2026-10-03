@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { isEditionUnlocked, getUnlockTargetDate } from '../utils/editionLock';
+import { CONFIG } from '../data/config.js';
 
 const ModeContext = createContext();
 
@@ -12,7 +13,7 @@ export function ModeProvider({ children }) {
   const [isUnlocked, setIsUnlocked] = useState(() => isEditionUnlocked());
 
   const [mode, setModeState] = useState(() => {
-    // If not yet unlocked (before 11:11 PM), force ME mode
+    // If not yet unlocked, force ME mode
     if (!isEditionUnlocked()) {
       return MODES.ME;
     }
@@ -35,7 +36,7 @@ export function ModeProvider({ children }) {
 
   const setMode = (newMode) => {
     if (newMode === MODES.HER && !isUnlocked && !isEditionUnlocked()) {
-      console.warn("Sri Dhanya Edition is locked until 11:11 PM!");
+      console.warn(`Sri Dhanya Edition is locked until ${CONFIG.editionUnlock?.timeDisplay || '7:30 PM'}!`);
       return false;
     }
     setModeState(newMode);

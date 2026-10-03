@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { getTimeRemaining, isEditionUnlocked } from '../utils/editionLock';
 
 /**
- * Custom hook to run a real-time countdown timer until today 11:11 PM.
+ * Custom hook to run a real-time countdown timer until unlock today.
  */
 export function useEditionCountdown(onUnlock) {
   const [timeRemaining, setTimeRemaining] = useState(() => getTimeRemaining());
