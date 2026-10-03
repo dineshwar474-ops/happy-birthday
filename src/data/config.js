@@ -35,7 +35,7 @@ export const CONFIG = {
       
       // When already in Her mode
       activeHerTitle: "🌸 Sri Dhanya (Mental) Edition Active! ✨",
-      activeHerMessage: "Ippo website muzhuka unna pathi dhaan irukku! Unmaiyana birthday celebration pudichuruka? 💖\nVenumna marubadiyum main character comedy mode-ku maathikalaam!",
+      activeHerMessage: "Ippo website muzhuka unna pathi dhaan irukku! 💖\nVenumna marubadiyum main character mode-ku maathikalaam!",
       switchToMeText: "👑 Switch to Main Character Roasting Mode",
       stayHerText: "Keep Sri Dhanya Edition 🌸"
     }

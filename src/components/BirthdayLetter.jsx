@@ -132,7 +132,7 @@ export default function BirthdayLetter({ onNext }) {
               </motion.p>
 
               <motion.p variants={paragraphVariants} style={{ marginBottom: '28px' }}>
-                I’m not going to write a hundred lines trying to impress you today.
+                I’m not going to write a hundred lines to you today.
                 The truth is much simpler:
                 out of all the noise in this world, your presence is the only thing that quietly holds my attention.
               </motion.p>
