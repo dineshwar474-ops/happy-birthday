@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { Mail, Sparkles } from 'lucide-react';
+import { useMode } from '../context/ModeContext';
 
 export default function Envelope({ onOpen }) {
+  const { isHerMode } = useMode();
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpenClick = () => {
@@ -57,16 +59,16 @@ export default function Envelope({ onOpen }) {
               fontSize: '0.85rem',
               letterSpacing: '0.2em',
               textTransform: 'uppercase',
-              color: 'var(--color-rose)',
+              color: isHerMode ? 'var(--color-gold)' : 'var(--color-rose)',
               opacity: 0.85,
               display: 'block',
               marginBottom: '10px'
             }}
           >
-            ✦ A Secret Sealed ✦
+            {isHerMode ? "✦ Sealed with Pure Love ✦" : "✦ A Secret Sealed ✦"}
           </span>
           <h2
-            className="font-serif text-glow"
+            className={isHerMode ? "font-serif text-glow-gold" : "font-serif text-glow"}
             style={{
               fontSize: 'clamp(2rem, 5vw, 3rem)',
               fontWeight: 400,
@@ -75,7 +77,7 @@ export default function Envelope({ onOpen }) {
               marginBottom: '16px'
             }}
           >
-            There is one last thing.
+            {isHerMode ? "A Letter for Mental." : "There is one last thing."}
           </h2>
           <p
             className="font-serif"
@@ -88,11 +90,23 @@ export default function Envelope({ onOpen }) {
               margin: '0 auto'
             }}
           >
-            I could have simply said<br />
-            "Happy Birthday."<br />
-            <span style={{ fontSize: '1.05rem', color: 'var(--color-blush)', opacity: 0.9 }}>
-              But where's the fun in that?
-            </span>
+            {isHerMode ? (
+              <>
+                Written with genuine admiration,<br />
+                pride, and warmth...<br />
+                <span style={{ fontSize: '1.05rem', color: 'var(--color-blush)', opacity: 0.95 }}>
+                  Just for Sri Dhanya. ♡
+                </span>
+              </>
+            ) : (
+              <>
+                I could have simply said<br />
+                "Happy Birthday."<br />
+                <span style={{ fontSize: '1.05rem', color: 'var(--color-blush)', opacity: 0.9 }}>
+                  But where's the fun in that?
+                </span>
+              </>
+            )}
           </p>
         </motion.div>
 
@@ -265,7 +279,9 @@ export default function Envelope({ onOpen }) {
             className="btn-primary btn-gold"
             style={{ padding: '16px 42px', fontSize: '1.2rem' }}
           >
-            {isOpen ? 'Unfolding... ✉' : 'Open the letter ✉'}
+            {isOpen 
+              ? 'Unfolding... ✉' 
+              : (isHerMode ? "Open Sri Dhanya's letter 💌" : 'Open the letter ✉')}
           </button>
         </div>
       </div>

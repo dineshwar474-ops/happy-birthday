@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CONFIG } from '../data/config';
+import { useMode } from '../context/ModeContext';
 
 export default function MysteryQuestion({ onNext }) {
+  const { isHerMode } = useMode();
   const [playfulMessage, setPlayfulMessage] = useState(null);
 
   const handleObviously = () => {
-    setPlayfulMessage("I knew you couldn't wait to see what the main character made for you. 👀");
+    if (isHerMode) {
+      setPlayfulMessage("Keep that sweet smile on your lips, Sri Dhanya... the celebration is only just beginning. 🌸✨");
+    } else {
+      setPlayfulMessage("I knew you couldn't wait to see what the main character made for you. 👀");
+    }
     setTimeout(() => {
       onNext();
     }, 2200);
@@ -37,7 +43,7 @@ export default function MysteryQuestion({ onNext }) {
       }}
     >
       <div 
-        className="glass-panel" 
+        className={isHerMode ? "glass-panel-gold" : "glass-panel"} 
         style={{ 
           maxWidth: '580px', 
           width: '100%', 
@@ -57,7 +63,7 @@ export default function MysteryQuestion({ onNext }) {
             marginBottom: '12px' 
           }}
         >
-          Hold on a second...
+          {isHerMode ? "A Moment Just for You... 🌸" : "Hold on a second..."}
         </span>
 
         <p 
@@ -70,11 +76,11 @@ export default function MysteryQuestion({ onNext }) {
             marginBottom: '26px' 
           }}
         >
-          Security Clearance Required
+          {isHerMode ? "Royal Sanctuary Entry" : "Security Clearance Required"}
         </p>
 
         <h2 
-          className="font-serif text-glow"
+          className={isHerMode ? "font-serif text-glow-gold" : "font-serif text-glow"}
           style={{
             fontSize: 'clamp(1.9rem, 4.8vw, 2.9rem)',
             fontWeight: 300,
@@ -83,8 +89,17 @@ export default function MysteryQuestion({ onNext }) {
             marginBottom: '40px'
           }}
         >
-          Are you the {CONFIG.HER_NAME} who is having a birthday today...<br />
-          or did I accidentally send this VIP link to the wrong person?
+          {isHerMode ? (
+            <>
+              Are you ready to step into a universe<br />
+              crafted just to make you smile, {CONFIG.HER_NAME}?
+            </>
+          ) : (
+            <>
+              Are you the {CONFIG.HER_NAME} who is having a birthday today...<br />
+              or did I accidentally send this VIP link to the wrong person?
+            </>
+          )}
         </h2>
 
         <AnimatePresence mode="wait">
@@ -126,7 +141,7 @@ export default function MysteryQuestion({ onNext }) {
                 className="btn-primary"
                 style={{ minWidth: '160px' }}
               >
-                It's me, Mental ✦
+                {isHerMode ? "Yes, I'm ready 🌸" : "It's me, Mental ✦"}
               </button>
 
               <button
@@ -138,7 +153,7 @@ export default function MysteryQuestion({ onNext }) {
                   fontSize: '1.15rem'
                 }}
               >
-                Obviously.
+                {isHerMode ? "Make me smile ✨" : "Obviously."}
               </button>
             </motion.div>
           )}

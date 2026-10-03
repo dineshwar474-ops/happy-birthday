@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { wishes } from '../data/wishes';
+import { wishes, herWishes } from '../data/wishes';
 import confetti from 'canvas-confetti';
 import { Sparkles, X, ChevronRight } from 'lucide-react';
+import { useMode } from '../context/ModeContext';
 
 export default function BirthdayJar({ onNext }) {
+  const { isHerMode } = useMode();
+  const activeWishes = isHerMode ? herWishes : wishes;
+
   const [openedNotes, setOpenedNotes] = useState(new Set());
   const [activeWish, setActiveWish] = useState(null);
 
@@ -67,14 +71,14 @@ export default function BirthdayJar({ onNext }) {
               fontSize: '0.85rem',
               letterSpacing: '0.2em',
               textTransform: 'uppercase',
-              color: 'var(--color-rose)',
+              color: isHerMode ? 'var(--color-gold)' : 'var(--color-rose)',
               opacity: 0.85
             }}
           >
-            ✦ Keepsake Vessel ✦
+            {isHerMode ? "✦ Vessel of Blessings ✦" : "✦ Keepsake Vessel ✦"}
           </span>
           <h2
-            className="font-serif text-glow"
+            className={isHerMode ? "font-serif text-glow-gold" : "font-serif text-glow"}
             style={{
               fontSize: 'clamp(2rem, 5vw, 2.8rem)',
               fontWeight: 400,
@@ -82,7 +86,7 @@ export default function BirthdayJar({ onNext }) {
               marginTop: '6px'
             }}
           >
-            A few thoughts for you...
+            {isHerMode ? "Heartfelt wishes for Mental..." : "A few thoughts for you..."}
           </h2>
           <p
             className="font-serif"
@@ -93,7 +97,7 @@ export default function BirthdayJar({ onNext }) {
               marginTop: '4px'
             }}
           >
-            Pick one.
+            {isHerMode ? "Pick any folded blessing inside." : "Pick one."}
           </p>
         </motion.div>
 
@@ -171,13 +175,13 @@ export default function BirthdayJar({ onNext }) {
             />
 
             {/* Glowing Notes Inside Jar */}
-            {wishes.map((wish, index) => {
+            {activeWishes.map((wish, index) => {
               const layout = notePlacements[index] || { rotate: 0, x: 0, y: 0, width: 60 };
               const isOpened = openedNotes.has(wish.id);
 
               return (
                 <motion.button
-                  key={wish.id}
+                  key={wish.id + (isHerMode ? '-her' : '-me')}
                   onClick={() => handleNoteClick(wish)}
                   whileHover={{ scale: 1.15, y: -4 }}
                   whileTap={{ scale: 0.95 }}
@@ -239,10 +243,12 @@ export default function BirthdayJar({ onNext }) {
                   marginBottom: '12px'
                 }}
               >
-                Okay... that's enough happiness for one jar. ✨
+                {isHerMode 
+                  ? "So much warmth and blessings in one jar. ✨" 
+                  : "Okay... that's enough happiness for one jar. ✨"}
               </p>
               <button onClick={onNext} className="btn-primary btn-gold" style={{ width: '100%' }}>
-                Continue to the Secret ✦
+                {isHerMode ? "Continue to the Letter 🌸" : "Continue to the Secret ✦"}
               </button>
             </motion.div>
           ) : (
@@ -305,7 +311,7 @@ export default function BirthdayJar({ onNext }) {
               exit={{ scale: 0.75, opacity: 0, y: 20 }}
               transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
               onClick={(e) => e.stopPropagation()}
-              className="glass-panel"
+              className={isHerMode ? "glass-panel-gold" : "glass-panel"}
               style={{
                 maxWidth: '440px',
                 width: '100%',
@@ -348,7 +354,7 @@ export default function BirthdayJar({ onNext }) {
                   marginBottom: '16px'
                 }}
               >
-                ✦ A Thought from the Jar ✦
+                {isHerMode ? "✦ A Birthday Wish for Sri Dhanya ✦" : "✦ A Thought from the Jar ✦"}
               </span>
 
               <p

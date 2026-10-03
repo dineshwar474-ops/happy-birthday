@@ -1,8 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles } from 'lucide-react';
+import { useMode } from '../context/ModeContext';
+import { CONFIG } from '../data/config';
 
 export default function IntroScreen({ onNext }) {
+  const { isHerMode } = useMode();
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -51,7 +55,7 @@ export default function IntroScreen({ onNext }) {
       }}
     >
       <div style={{ maxWidth: '580px', width: '100%', margin: '0 auto' }}>
-        {/* Mysterious Top Star Symbol */}
+        {/* Top Star Symbol */}
         <motion.div variants={itemVariants} style={{ marginBottom: '24px' }}>
           <motion.div
             animate={{
@@ -69,10 +73,10 @@ export default function IntroScreen({ onNext }) {
           </motion.div>
         </motion.div>
 
-        {/* Mysterious Heading */}
+        {/* Heading */}
         <motion.div variants={itemVariants}>
           <h1
-            className="font-serif text-glow"
+            className={isHerMode ? "font-serif text-glow-rose" : "font-serif text-glow"}
             style={{
               fontSize: 'clamp(2.4rem, 6.5vw, 4.2rem)',
               fontWeight: 300,
@@ -82,9 +86,19 @@ export default function IntroScreen({ onNext }) {
               marginBottom: '28px'
             }}
           >
-            Something<br />
-            was left here<br />
-            for you.
+            {isHerMode ? (
+              <>
+                A universe<br />
+                made just for<br />
+                <span style={{ color: 'var(--color-champagne)' }}>{CONFIG.HER_NAME}.</span>
+              </>
+            ) : (
+              <>
+                Something<br />
+                was left here<br />
+                for you.
+              </>
+            )}
           </h1>
         </motion.div>
 
@@ -95,7 +109,7 @@ export default function IntroScreen({ onNext }) {
           </span>
         </motion.div>
 
-        {/* Question Subtext */}
+        {/* Subtext */}
         <motion.p
           variants={itemVariants}
           className="font-serif"
@@ -108,20 +122,20 @@ export default function IntroScreen({ onNext }) {
             opacity: 0.9
           }}
         >
-          Are you curious?
+          {isHerMode ? "Today, every single star shines for you." : "Are you curious?"}
         </motion.p>
 
         {/* Enter Button */}
         <motion.div variants={itemVariants}>
           <button
             onClick={onNext}
-            className="btn-primary"
+            className={isHerMode ? "btn-primary btn-gold" : "btn-primary"}
             style={{
               padding: '16px 44px',
               fontSize: '1.2rem'
             }}
           >
-            Enter ✦
+            {isHerMode ? "Begin Celebration 🌸" : "Enter ✦"}
           </button>
         </motion.div>
       </div>

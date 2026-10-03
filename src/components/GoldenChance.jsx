@@ -2,9 +2,13 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { Sparkles, Copy, Check, Send } from 'lucide-react';
-import { gift } from '../data/gift';
+import { gift, herGift } from '../data/gift';
+import { useMode } from '../context/ModeContext';
 
 export default function GoldenChance({ request, setRequest, onNext }) {
+  const { isHerMode } = useMode();
+  const activeGift = isHerMode ? herGift : gift;
+
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [copied, setCopied] = useState(false);
@@ -12,7 +16,23 @@ export default function GoldenChance({ request, setRequest, onNext }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!request.trim()) {
-      setErrorMsg('Please write your one wish first...');
+      setErrorMsg('Please write your wish first...');
+      return;
+    }
+
+    // Playful check if she asks not to leave office or about WFH/leave
+    const lowerReq = request.toLowerCase();
+    if (
+      lowerReq.includes('office') ||
+      lowerReq.includes('poga') ||
+      lowerReq.includes('leave') ||
+      lowerReq.includes('resign') ||
+      lowerReq.includes('wfh') ||
+      lowerReq.includes('work from home') ||
+      lowerReq.includes('varaikkum') ||
+      lowerReq.includes('varaikum')
+    ) {
+      setErrorMsg("Naan dhaan munnadiyeh sonnen la! 'Office vitu pogakudathu' and 'WFH / leave podakudathu' are THAT'S NOT POSSIBLE! 😂 Vera edhaavathu real gift kelu!");
       return;
     }
 
@@ -27,7 +47,10 @@ export default function GoldenChance({ request, setRequest, onNext }) {
     });
   };
 
-  const formattedWhatsAppMessage = `Hey! For my birthday gift, my one golden chance request is: "${request}" 🎁✨`;
+  const formattedWhatsAppMessage = isHerMode
+    ? `Hey! For my birthday gift, my special wish is: "${request}" 🎁🌸✨`
+    : `Hey! For my birthday gift, my one golden chance request is: "${request}" 🎁✨`;
+
   const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(formattedWhatsAppMessage)}`;
 
   const handleCopy = () => {
@@ -59,7 +82,7 @@ export default function GoldenChance({ request, setRequest, onNext }) {
       <div style={{ maxWidth: '600px', width: '100%', margin: '0 auto' }}>
         <AnimatePresence mode="wait">
           {!isSubmitted ? (
-            /* SCREEN 9: THE GOLDEN CHANCE INPUT */
+            /* INPUT FORM */
             <motion.div
               key="input-form"
               initial={{ opacity: 0, y: 20 }}
@@ -84,7 +107,7 @@ export default function GoldenChance({ request, setRequest, onNext }) {
                   marginBottom: '12px'
                 }}
               >
-                ✦ A Rare Opportunity ✦
+                {isHerMode ? "✦ Mental's Privilege ✦" : "✦ A Rare Opportunity ✦"}
               </span>
 
               <h2
@@ -97,7 +120,7 @@ export default function GoldenChance({ request, setRequest, onNext }) {
                   marginBottom: '10px'
                 }}
               >
-                You have one golden chance.
+                {isHerMode ? "Your golden birthday wish." : "You have one golden chance."}
               </h2>
 
               <p
@@ -106,11 +129,75 @@ export default function GoldenChance({ request, setRequest, onNext }) {
                   fontSize: 'clamp(1.2rem, 3.2vw, 1.55rem)',
                   fontStyle: 'italic',
                   color: 'var(--color-champagne)',
-                  marginBottom: '32px'
+                  marginBottom: '24px'
                 }}
               >
-                {gift.promptText}
+                {activeGift.promptText}
               </p>
+
+              {/* Pre-emptive Notice for Sri Dhanya */}
+              {isHerMode && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  style={{
+                    padding: '18px 20px',
+                    borderRadius: '16px',
+                    background: 'rgba(216, 140, 154, 0.15)',
+                    border: '1px dashed rgba(212, 175, 55, 0.7)',
+                    marginBottom: '24px',
+                    textAlign: 'center'
+                  }}
+                >
+                  <span style={{ fontSize: '1.4rem', display: 'block', marginBottom: '4px' }}>
+                    👀 ⚠️
+                  </span>
+                  <p
+                    className="font-serif text-glow-gold"
+                    style={{
+                      fontSize: '1.25rem',
+                      fontWeight: 600,
+                      color: 'var(--color-champagne)',
+                      marginBottom: '8px'
+                    }}
+                  >
+                    "Ne ena kepa nu enaku teryum..."
+                  </p>
+                  <p
+                    className="font-serif"
+                    style={{
+                      fontSize: '1.14rem',
+                      lineHeight: '1.6',
+                      color: 'var(--color-cream)',
+                      marginBottom: '6px'
+                    }}
+                  >
+                    1. <em>"Office vitu ne pogakudathu na solra varikum"</em> nu soluva...
+                  </p>
+                  <p
+                    className="font-serif"
+                    style={{
+                      fontSize: '1.14rem',
+                      lineHeight: '1.6',
+                      color: 'var(--color-cream)',
+                      marginBottom: '10px'
+                    }}
+                  >
+                    2. <em>"Naan sollumbodhu mattum dhaan nee work from home or leave podanum, illana poda koodathu"</em> nu soluva... 😂
+                  </p>
+                  <p
+                    style={{
+                      fontFamily: 'var(--font-sans)',
+                      fontSize: '0.95rem',
+                      color: 'var(--color-rose)',
+                      fontWeight: 700,
+                      letterSpacing: '0.04em'
+                    }}
+                  >
+                    That's NOT possible! Ask something else! 😂🎁
+                  </p>
+                </motion.div>
+              )}
 
               <form onSubmit={handleSubmit} style={{ width: '100%' }}>
                 <div style={{ position: 'relative', marginBottom: '18px' }}>
@@ -121,7 +208,7 @@ export default function GoldenChance({ request, setRequest, onNext }) {
                       setRequest(e.target.value);
                       if (errorMsg) setErrorMsg('');
                     }}
-                    placeholder={gift.placeholder}
+                    placeholder={activeGift.placeholder}
                     style={{
                       width: '100%',
                       padding: '16px 20px',
@@ -152,9 +239,14 @@ export default function GoldenChance({ request, setRequest, onNext }) {
                   <p
                     style={{
                       color: 'var(--color-rose)',
-                      fontSize: '0.9rem',
+                      fontSize: '0.95rem',
+                      fontWeight: 600,
                       marginBottom: '16px',
-                      fontFamily: 'var(--font-sans)'
+                      fontFamily: 'var(--font-sans)',
+                      background: 'rgba(216, 140, 154, 0.15)',
+                      padding: '10px 16px',
+                      borderRadius: '10px',
+                      border: '1px solid rgba(216, 140, 154, 0.3)'
                     }}
                   >
                     {errorMsg}
@@ -171,7 +263,7 @@ export default function GoldenChance({ request, setRequest, onNext }) {
                     opacity: 0.9
                   }}
                 >
-                  Remember... only one gift. 👀
+                  {activeGift.reminderText}
                 </p>
 
                 <button
@@ -179,12 +271,12 @@ export default function GoldenChance({ request, setRequest, onNext }) {
                   className="btn-primary btn-gold"
                   style={{ padding: '16px 42px', fontSize: '1.2rem' }}
                 >
-                  Make my request ✦
+                  {isHerMode ? "Submit my wish 🌸" : "Make my request ✦"}
                 </button>
               </form>
             </motion.div>
           ) : (
-            /* SCREEN 10: THE GOLDEN PROMISE & TAMIL DISCLOSURE */
+            /* REVEAL SCREEN */
             <motion.div
               key="promise-reveal"
               initial={{ opacity: 0, scale: 0.92, y: 25 }}
@@ -206,7 +298,7 @@ export default function GoldenChance({ request, setRequest, onNext }) {
                   marginBottom: '8px'
                 }}
               >
-                Well...
+                {isHerMode ? "A Royal Wish Made..." : "Well..."}
               </span>
 
               <h2
@@ -218,7 +310,7 @@ export default function GoldenChance({ request, setRequest, onNext }) {
                   marginBottom: '20px'
                 }}
               >
-                You used your one golden chance.
+                {isHerMode ? "Your wish has been officially recorded." : "You used your one golden chance."}
               </h2>
 
               <p
@@ -231,7 +323,7 @@ export default function GoldenChance({ request, setRequest, onNext }) {
                   marginBottom: '12px'
                 }}
               >
-                You asked for:
+                {isHerMode ? "Sri Dhanya asked for:" : "You asked for:"}
               </p>
 
               {/* The Request Highlight Card */}
@@ -266,7 +358,7 @@ export default function GoldenChance({ request, setRequest, onNext }) {
                   marginBottom: '24px'
                 }}
               >
-                And I said I'd say yes. ✨
+                {isHerMode ? "And the answer is a 100% YES! 💖" : "And I said I'd say yes. ✨"}
               </p>
 
               {/* Sarcastic Tamil Notice Box */}
@@ -281,7 +373,7 @@ export default function GoldenChance({ request, setRequest, onNext }) {
                 }}
               >
                 <span style={{ fontSize: '1.5rem', display: 'block', marginBottom: '6px' }}>
-                  👀
+                  👀 ⚠️
                 </span>
                 <p
                   className="font-serif"
@@ -331,7 +423,7 @@ export default function GoldenChance({ request, setRequest, onNext }) {
 
               <div>
                 <button onClick={onNext} className="btn-primary btn-gold" style={{ padding: '15px 40px' }}>
-                  One last mystery... ✦
+                  {isHerMode ? "The Grand Finale 🌸" : "One last mystery... ✦"}
                 </button>
               </div>
             </motion.div>

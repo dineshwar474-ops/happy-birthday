@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { memories } from '../data/memories';
+import { memories, herMemories } from '../data/memories';
 import MemoryStar from './MemoryStar';
 import confetti from 'canvas-confetti';
 import { Sparkles, X } from 'lucide-react';
+import { useMode } from '../context/ModeContext';
 
 export default function Constellation({ onNext }) {
+  const { isHerMode } = useMode();
+  const activeMemories = isHerMode ? herMemories : memories;
+
   const [openedStars, setOpenedStars] = useState(new Set());
   const [activeMemory, setActiveMemory] = useState(null);
 
-  const allOpened = openedStars.size === memories.length;
+  const allOpened = openedStars.size === activeMemories.length;
 
   const handleStarClick = (memory) => {
     setOpenedStars((prev) => new Set([...prev, memory.id]));
@@ -27,15 +31,10 @@ export default function Constellation({ onNext }) {
   };
 
   // Lines to draw between adjacent diamonds as they get opened
-  const pairs = [
-    [1, 2],
-    [2, 3],
-    [3, 4],
-    [4, 5],
-    [5, 6],
-    [6, 7],
-    [7, 1]
-  ];
+  const pairs = activeMemories.map((m, idx) => [
+    m.id,
+    activeMemories[(idx + 1) % activeMemories.length].id
+  ]);
 
   return (
     <motion.main
@@ -66,15 +65,15 @@ export default function Constellation({ onNext }) {
             fontSize: '0.85rem',
             letterSpacing: '0.2em',
             textTransform: 'uppercase',
-            color: 'var(--color-rose)'
+            color: isHerMode ? 'var(--color-gold)' : 'var(--color-rose)'
           }}
         >
-          ✦ Celestial Diamonds ✦
+          {isHerMode ? "✦ The Constellation of Sri Dhanya ✦" : "✦ Celestial Diamonds ✦"}
         </motion.span>
         <motion.h2
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="font-serif text-glow"
+          className={isHerMode ? "font-serif text-glow-gold" : "font-serif text-glow"}
           style={{
             fontSize: 'clamp(2rem, 4.5vw, 2.8rem)',
             fontWeight: 400,
@@ -82,7 +81,7 @@ export default function Constellation({ onNext }) {
             marginTop: '8px'
           }}
         >
-          A few things quietly noticed about you.
+          {isHerMode ? "4 quiet truths noticed about you." : "A few things quietly noticed about you."}
         </motion.h2>
         <motion.p
           initial={{ opacity: 0 }}
@@ -95,7 +94,9 @@ export default function Constellation({ onNext }) {
             marginTop: '6px'
           }}
         >
-          Unspoken observations hidden across the night sky. ({openedStars.size}/{memories.length} revealed)
+          {isHerMode 
+            ? `Hidden diamonds in the night sky. (${openedStars.size}/${activeMemories.length} revealed)`
+            : `Unspoken observations hidden across the night sky. (${openedStars.size}/${activeMemories.length} revealed)`}
         </motion.p>
       </div>
 
@@ -121,8 +122,9 @@ export default function Constellation({ onNext }) {
           }}
         >
           {pairs.map(([fromId, toId], idx) => {
-            const starA = memories.find((m) => m.id === fromId);
-            const starB = memories.find((m) => m.id === toId);
+            const starA = activeMemories.find((m) => m.id === fromId);
+            const starB = activeMemories.find((m) => m.id === toId);
+            if (!starA || !starB) return null;
             const isLineActive = openedStars.has(fromId) && openedStars.has(toId);
 
             return (
@@ -151,9 +153,9 @@ export default function Constellation({ onNext }) {
         </svg>
 
         {/* The Diamond Nodes */}
-        {memories.map((memory) => (
+        {activeMemories.map((memory) => (
           <MemoryStar
-            key={memory.id}
+            key={memory.id + (isHerMode ? '-her' : '-me')}
             memory={memory}
             isOpened={openedStars.has(memory.id)}
             onClick={() => handleStarClick(memory)}
@@ -180,7 +182,7 @@ export default function Constellation({ onNext }) {
                 className="font-serif text-glow-gold"
                 style={{ fontSize: '1.5rem', color: 'var(--color-champagne)', marginBottom: '6px' }}
               >
-                You unlocked every diamond.
+                {isHerMode ? "You unlocked all 4 diamonds. ✦" : "You unlocked every diamond."}
               </h3>
               <p
                 className="font-serif"
@@ -191,7 +193,9 @@ export default function Constellation({ onNext }) {
                   marginBottom: '16px'
                 }}
               >
-                Maybe some truths are better left unspoken... but never unnoticed. ✦
+                {isHerMode 
+                  ? "Some truths don't need to be loud to stay in the mind. ✦" 
+                  : "Maybe some truths are better left unspoken... but never unnoticed. ✦"}
               </p>
               <button onClick={onNext} className="btn-primary btn-gold">
                 Continue to the Jar ✦
@@ -215,7 +219,7 @@ export default function Constellation({ onNext }) {
                   className="btn-secondary"
                   style={{ fontSize: '0.9rem', padding: '8px 22px' }}
                 >
-                  Continue to the Jar ({openedStars.size}/{memories.length}) ✦
+                  Continue to the Jar ({openedStars.size}/{activeMemories.length}) ✦
                 </button>
               )}
             </div>

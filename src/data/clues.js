@@ -1,5 +1,4 @@
-// The 5 Undeniable Facts & Reality Checks (Main Character Edition)
-
+// The 5 Reality Checks (Main Character Edition)
 export const clues = [
   {
     id: 1,
@@ -35,5 +34,44 @@ export const clues = [
     label: "Fact 05",
     text: "You are extraordinarily lucky that I spent hours\nbuilding this bespoke digital universe for you...\nYou should genuinely be thanking the universe for having me in your life.",
     hint: "The main character doing main character things..."
+  }
+];
+
+// The 5 Truths About Sri Dhanya (Her Edition: Short, Sweet, Mysterious, Non-Repetitive)
+export const herClues = [
+  {
+    id: 1,
+    number: "01",
+    label: "Truth 01",
+    text: "You pretend to look away, but you notice everything.\nEvery look, every pause, every shift in the room.\nYou just quietly watch and smile to yourself.",
+    hint: "Quiet eyes that miss nothing..."
+  },
+  {
+    id: 2,
+    number: "02",
+    label: "Truth 02",
+    text: "Whenever someone catches you off-guard,\nyou try your hardest to look stern and annoyed...\nbut that subtle little blush gives you away every single time.",
+    hint: "The blush you try so hard to hide..."
+  },
+  {
+    id: 3,
+    number: "03",
+    label: "Truth 03",
+    text: "You threaten violence against my face almost daily,\nyet anyone who knows you knows you have the softest heart\nand wouldn't hurt a fly.",
+    hint: "Harmless threats and a gentle soul..."
+  },
+  {
+    id: 4,
+    number: "04",
+    label: "Truth 04",
+    text: "You act like having me around tests your patience,\nbut we both know a quiet day at work without our banter\nfeels completely incomplete.",
+    hint: "The silence that feels too quiet..."
+  },
+  {
+    id: 5,
+    number: "05",
+    label: "Truth 05",
+    text: "Today, no jokes, no teasing, and no deflection.\nJust one simple, honest truth:\nyou are deeply valued, Mental. Happy Birthday.",
+    hint: "Just a quiet truth for you..."
   }
 ];

@@ -1,5 +1,4 @@
 // The 7 Celestial Diamonds: Main Character Edition
-
 export const memories = [
   {
     id: 1,
@@ -63,6 +62,47 @@ export const memories = [
     x: 32,
     y: 63,
     subtext: "A life without me teasing you would be terribly dull, and you know it.",
+    isEasterEgg: false
+  }
+];
+
+// The 4 Celestial Diamonds: Sri Dhanya Edition (Short, Sweet, Mysterious, Memorable)
+export const herMemories = [
+  {
+    id: 1,
+    title: "The Silent Fire",
+    text: "You play badminton and cricket, but I haven't watched you play in person yet.\n\nThere's something quiet and captivating about that. I already know that fire looks good on you.",
+    x: 50,
+    y: 22,
+    subtext: "✦ An athletic fire waiting to be witnessed.",
+    isEasterEgg: false
+  },
+  {
+    id: 2,
+    title: "The 20-Day Habit",
+    text: "More than twenty days a month, sitting near each other at work.\n\nFunny how ordinary routines become the thing you look forward to most, just because of one person.",
+    x: 75,
+    y: 50,
+    subtext: "✦ Subtle glances, quiet jokes, and comfortable silence.",
+    isEasterEgg: false
+  },
+  {
+    id: 3,
+    title: "The Velvet Truth",
+    text: "You think you hide your soft side behind all that sarcastic banter and threats.\n\nTruth is, I see right through the bravado. That sensitive heart of yours is the rarest thing about you.",
+    secretNote: "P.S. — You don't ever have to pretend to be made of stone with me. Happy birthday, Mental. ♡",
+    x: 50,
+    y: 78,
+    subtext: "✦ A truth meant only for you to hold.",
+    isEasterEgg: true
+  },
+  {
+    id: 4,
+    title: "The Unfiltered Chaos",
+    text: "The random face-slap threats. The sudden gossips. The dramatic eye rolls.\n\nYou make quiet days loud and ordinary days unforgettable. Never lose that spark.",
+    x: 25,
+    y: 50,
+    subtext: "✦ The rare charm of being completely yourself.",
     isEasterEgg: false
   }
 ];

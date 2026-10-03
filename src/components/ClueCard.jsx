@@ -1,14 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { clues } from '../data/clues';
+import { clues, herClues } from '../data/clues';
 import { Sparkles, Eye } from 'lucide-react';
+import { useMode } from '../context/ModeContext';
 
 export default function ClueCard({ onComplete }) {
+  const { isHerMode } = useMode();
+  const activeClues = isHerMode ? herClues : clues;
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isRevealed, setIsRevealed] = useState(false);
 
-  const currentClue = clues[currentIndex];
-  const isLastClue = currentIndex === clues.length - 1;
+  // If mode switches, keep index bounded
+  useEffect(() => {
+    if (currentIndex >= activeClues.length) {
+      setCurrentIndex(0);
+    }
+  }, [isHerMode, activeClues.length, currentIndex]);
+
+  const currentClue = activeClues[currentIndex] || activeClues[0];
+  const isLastClue = currentIndex === activeClues.length - 1;
 
   const handleReveal = () => {
     setIsRevealed(true);
@@ -54,14 +65,14 @@ export default function ClueCard({ onComplete }) {
               fontSize: '0.85rem', 
               letterSpacing: '0.2em', 
               textTransform: 'uppercase', 
-              color: 'var(--color-rose)',
+              color: isHerMode ? 'var(--color-gold)' : 'var(--color-rose)',
               opacity: 0.9 
             }}
           >
-            ✦ The Official Reality Checks ✦
+            {isHerMode ? "✦ The Undeniable Truths ✦" : "✦ The Official Reality Checks ✦"}
           </span>
           <h2
-            className="font-serif text-glow"
+            className={isHerMode ? "font-serif text-glow-gold" : "font-serif text-glow"}
             style={{
               fontSize: 'clamp(2rem, 4.5vw, 2.8rem)',
               fontWeight: 400,
@@ -69,7 +80,7 @@ export default function ClueCard({ onComplete }) {
               marginTop: '8px'
             }}
           >
-            A few undeniable facts about us.
+            {isHerMode ? "5 truths celebrating the one and only Sri Dhanya." : "A few undeniable facts about us."}
           </h2>
           <p
             style={{
@@ -80,19 +91,21 @@ export default function ClueCard({ onComplete }) {
               marginTop: '6px'
             }}
           >
-            Fact {currentIndex + 1} of {clues.length} (Just in case you forgot who the main character is)
+            {isHerMode 
+              ? `Truth ${currentIndex + 1} of ${activeClues.length}`
+              : `Fact ${currentIndex + 1} of ${activeClues.length} (Just in case you forgot who the main character is)`}
           </p>
         </motion.div>
 
         {/* The Card */}
         <AnimatePresence mode="wait">
           <motion.div
-            key={currentClue.id}
+            key={currentClue.id + (isHerMode ? '-her' : '-me')}
             initial={{ opacity: 0, scale: 0.92, y: 25 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.92, y: -25 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="glass-panel"
+            className={isHerMode ? "glass-panel-gold" : "glass-panel"}
             style={{
               padding: 'clamp(36px, 6vw, 54px) clamp(24px, 5vw, 44px)',
               position: 'relative',
@@ -151,7 +164,7 @@ export default function ClueCard({ onComplete }) {
                       }} 
                     />
                     <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.85rem', color: 'rgba(255, 248, 241, 0.6)' }}>
-                      Tap reveal to accept this fact
+                      {isHerMode ? "Tap reveal to see this truth" : "Tap reveal to accept this fact"}
                     </p>
                   </motion.div>
                 ) : (
@@ -182,8 +195,8 @@ export default function ClueCard({ onComplete }) {
             {/* Buttons */}
             <div style={{ marginTop: '36px' }}>
               {!isRevealed ? (
-                <button onClick={handleReveal} className="btn-primary">
-                  Reveal Truth ✦
+                <button onClick={handleReveal} className={isHerMode ? "btn-primary btn-gold" : "btn-primary"}>
+                  {isHerMode ? "Reveal Truth 🌸" : "Reveal Truth ✦"}
                 </button>
               ) : (
                 <motion.button
@@ -192,7 +205,9 @@ export default function ClueCard({ onComplete }) {
                   onClick={handleContinue}
                   className="btn-primary btn-gold"
                 >
-                  {isLastClue ? 'Enter the Sky 🌙' : 'Accept & Continue ✦'}
+                  {isLastClue 
+                    ? 'Enter the Sky 🌙' 
+                    : (isHerMode ? 'Celebrate & Continue 🌸' : 'Accept & Continue ✦')}
                 </motion.button>
               )}
             </div>

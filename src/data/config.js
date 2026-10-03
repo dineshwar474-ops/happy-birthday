@@ -17,6 +17,27 @@ export const CONFIG = {
     moonClicksRequired: 3,
     moonMessage: "Okay...\n\nyou weren't supposed\nto find this, Mental. 👀",
     flowerMessage: "You know exactly why this is here. 🌸",
-    floatingWords: ["remember", "smile", "Mental", "laugh", "badminton", "cricket", "food"]
+    floatingWords: ["remember", "smile", "Mental", "laugh", "badminton", "cricket", "food"],
+
+    // The Secret Flower Dialogue
+    flowerDialog: {
+      tag: "Secret Flower Unlocked 🌸",
+      title: "Epudii... Tension aaniya? 😂",
+      lines: [
+        "Epudii Tension aaniya... 'Enoda birthday ku una pathiyeh potu vechurke' nu? 😂",
+        "Adhu epudi una tension panama takkunu soliduvana! 😜",
+        "Enaku theriyum... 'Ne la veladradu oru TT, adhu pathi peethitu iruka' nu nenachrupa... 'Ena da mental mari una pathiye peethirka' nu nenachrupa thaane? 🏓😆",
+        "Seri edho un birthday nra naala happy ah irukatum nu vidra pathuko!"
+      ],
+      switchPrompt: "Ippo unakku oru choice tharen:",
+      switchToHerText: "🌸 Switch to Sri Dhanya Edition (Full Appreciation!) ✨",
+      keepMeText: "😈 Irukkattum, let me roast you first! (Main Character Mode)",
+      
+      // When already in Her mode
+      activeHerTitle: "🌸 Sri Dhanya (Mental) Edition Active! ✨",
+      activeHerMessage: "Ippo website muzhuka unna pathi dhaan irukku! Unmaiyana birthday celebration pudichuruka? 💖\nVenumna marubadiyum main character comedy mode-ku maathikalaam!",
+      switchToMeText: "👑 Switch to Main Character Roasting Mode",
+      stayHerText: "Keep Sri Dhanya Edition 🌸"
+    }
   }
 };

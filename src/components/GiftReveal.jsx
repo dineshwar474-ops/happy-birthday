@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { Sparkles, Gift } from 'lucide-react';
+import { useMode } from '../context/ModeContext';
 
 export default function GiftReveal({ onNext }) {
+  const { isHerMode } = useMode();
   const [stage, setStage] = useState(0);
 
   // Timed dramatic progression
@@ -64,7 +66,7 @@ export default function GiftReveal({ onNext }) {
               marginBottom: '14px'
             }}
           >
-            My gift for you is...
+            {isHerMode ? "Because today belongs entirely to you..." : "My gift for you is..."}
           </motion.p>
 
           <AnimatePresence>
@@ -81,7 +83,7 @@ export default function GiftReveal({ onNext }) {
                   letterSpacing: '0.03em'
                 }}
               >
-                my answer will be YES.
+                {isHerMode ? "my answer will always be YES." : "my answer will be YES."}
               </motion.h2>
             )}
           </AnimatePresence>
@@ -102,7 +104,7 @@ export default function GiftReveal({ onNext }) {
                 margin: '20px 0 28px'
               }}
             >
-              Today, you have a golden chance.
+              {isHerMode ? "Today, you have one golden birthday wish." : "Today, you have a golden chance."}
             </motion.p>
           )}
         </AnimatePresence>
@@ -121,11 +123,11 @@ export default function GiftReveal({ onNext }) {
                   fontSize: '0.85rem',
                   letterSpacing: '0.18em',
                   textTransform: 'uppercase',
-                  color: 'var(--color-rose)',
+                  color: isHerMode ? 'var(--color-gold)' : 'var(--color-rose)',
                   marginBottom: '12px'
                 }}
               >
-                There's only one rule...
+                {isHerMode ? "A Privilege for Mental..." : "There's only one rule..."}
               </p>
 
               <h3
@@ -138,7 +140,7 @@ export default function GiftReveal({ onNext }) {
                   marginBottom: '8px'
                 }}
               >
-                You get to ask me for ONE gift.
+                {isHerMode ? "You get to ask for ONE special gift." : "You get to ask me for ONE gift."}
               </h3>
 
               <p
@@ -150,7 +152,7 @@ export default function GiftReveal({ onNext }) {
                   marginBottom: '32px'
                 }}
               >
-                Only one. ✨
+                {isHerMode ? "Whatever your heart desires! ✨" : "Only one. ✨"}
               </p>
 
               {/* Glowing Golden Gift Box */}
@@ -250,7 +252,7 @@ export default function GiftReveal({ onNext }) {
                 className="btn-primary btn-gold"
                 style={{ padding: '16px 44px', fontSize: '1.2rem' }}
               >
-                Open your chance ✦
+                {isHerMode ? "Make your birthday wish 🌸" : "Open your chance ✦"}
               </button>
             </motion.div>
           )}
