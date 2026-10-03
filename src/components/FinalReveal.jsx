@@ -349,18 +349,37 @@ export default function FinalReveal({ request, onRestart }) {
               </div>
 
               <div>
-                <button
-                  onClick={onRestart}
-                  className="btn-secondary"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    fontSize: '0.95rem'
-                  }}
-                >
-                  <RotateCcw size={15} /> Relive the surprise ✦
-                </button>
+                <div style={{ marginTop: '16px' }}>
+                  <button
+                    onClick={onRestart}
+                    className="btn-secondary"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      fontSize: '0.95rem'
+                    }}
+                  >
+                    <RotateCcw size={15} /> Relive the surprise ✦
+                  </button>
+
+                  {!isHerMode && (
+                    <div style={{ marginTop: '20px' }}>
+                      <p
+                        className="font-serif"
+                        style={{
+                          fontSize: '0.98rem',
+                          color: 'var(--color-champagne)',
+                          opacity: 0.8,
+                          fontStyle: 'italic',
+                          margin: 0
+                        }}
+                      >
+                        🌸 Psst... A secret tribute unlocks today at 11:11 PM. Look for the tiny blossom at the bottom right... ⏳
+                      </p>
+                    </div>
+                  )}
+                </div>
               </div>
             </motion.div>
           )}

@@ -1,17 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Moon, X, Heart } from 'lucide-react';
+import { Sparkles, Moon, X, Heart, Lock, Unlock, Clock } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { CONFIG } from '../data/config';
 import { useMode, MODES } from '../context/ModeContext';
+import CountdownTimer from './CountdownTimer';
+import { useEditionCountdown } from '../hooks/useEditionCountdown';
 
 export default function EasterEggs() {
-  const { mode, setMode, isHerMode } = useMode();
+  const { mode, setMode, isHerMode, unlockEdition } = useMode();
   const [moonClicks, setMoonClicks] = useState(0);
   const [showMoonModal, setShowMoonModal] = useState(false);
   const [showFlowerModal, setShowFlowerModal] = useState(false);
   const [floatingWord, setFloatingWord] = useState(null);
   const [switchToast, setSwitchToast] = useState(null);
+
+  // Live countdown timer running until today 11:11 PM
+  const timeRemaining = useEditionCountdown(() => {
+    unlockEdition();
+    confetti({
+      particleCount: 85,
+      spread: 100,
+      origin: { y: 0.5 },
+      colors: ['#D4AF37', '#F6E7C8', '#D88C9A', '#FFF8F1']
+    });
+    setSwitchToast("✨ 11:11 PM has arrived! Sri Dhanya Edition is now unlocked! 🌸");
+    setTimeout(() => setSwitchToast(null), 5000);
+  });
 
   const flowerDialog = CONFIG.easterEggs.flowerDialog;
 
@@ -50,11 +65,19 @@ export default function EasterEggs() {
   }, []);
 
   const handleSwitchToHer = () => {
-    setMode(MODES.HER);
+    if (!timeRemaining.isUnlocked) {
+      setSwitchToast("⏳ Locked! Sri Dhanya Edition strictly unlocks at 11:11 PM! 😜");
+      setTimeout(() => setSwitchToast(null), 3500);
+      return;
+    }
+
+    const ok = setMode(MODES.HER);
+    if (!ok) return;
+
     setShowFlowerModal(false);
 
     confetti({
-      particleCount: 75,
+      particleCount: 80,
       spread: 90,
       origin: { y: 0.6 },
       colors: ['#F3C6CC', '#D88C9A', '#F6E7C8', '#D4AF37', '#FFF8F1'],
@@ -176,35 +199,72 @@ export default function EasterEggs() {
         </button>
       </div>
 
-      {/* Easter Egg 3: Secret Flower near bottom right */}
+      {/* Easter Egg 3: Secret Flower near bottom right with 11:11 timer pill */}
       <div 
         style={{
           position: 'fixed',
           bottom: '16px',
           right: '16px',
-          zIndex: 80
+          zIndex: 80,
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px'
         }}
       >
+        {!isHerMode && !timeRemaining.isUnlocked && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            onClick={() => setShowFlowerModal(true)}
+            style={{
+              background: 'rgba(23, 15, 28, 0.85)',
+              border: '1px solid rgba(212, 175, 55, 0.4)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+              borderRadius: '16px',
+              padding: '4px 10px',
+              fontSize: '0.78rem',
+              color: 'var(--color-champagne)',
+              fontFamily: 'var(--font-sans)',
+              cursor: 'pointer',
+              boxShadow: '0 4px 16px rgba(0, 0, 0, 0.5)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '5px',
+              transition: 'all 0.3s ease'
+            }}
+            whileHover={{ scale: 1.05, borderColor: 'rgba(212, 175, 55, 0.8)' }}
+            title="Sri Dhanya Edition Unlocks at 11:11 PM"
+          >
+            <Clock size={12} style={{ color: 'var(--color-gold)' }} />
+            <span style={{ fontVariantNumeric: 'tabular-nums', fontWeight: 500, letterSpacing: '0.04em' }}>
+              11:11 ⏳
+            </span>
+          </motion.div>
+        )}
+
         <button
           onClick={() => setShowFlowerModal(true)}
           aria-label="A tiny secret flower"
-          title="A secret blossom..."
+          title={isHerMode ? "Sri Dhanya Edition Active" : (timeRemaining.isUnlocked ? "Secret Flower: Sri Dhanya Edition Unlocked! 🌸" : "Secret Flower: Locked until 11:11 PM ⏳")}
           style={{
             background: 'none',
             border: 'none',
             cursor: 'pointer',
-            opacity: isHerMode ? 0.9 : 0.45,
-            fontSize: isHerMode ? '18px' : '15px',
+            opacity: isHerMode ? 0.9 : (timeRemaining.isUnlocked ? 0.85 : 0.5),
+            fontSize: isHerMode ? '18px' : '16px',
             transition: 'all 0.3s ease',
             padding: '6px',
-            filter: isHerMode ? 'drop-shadow(0 0 8px rgba(216, 140, 154, 0.8))' : 'none'
+            filter: isHerMode 
+              ? 'drop-shadow(0 0 8px rgba(216, 140, 154, 0.8))' 
+              : (timeRemaining.isUnlocked ? 'drop-shadow(0 0 8px rgba(212, 175, 55, 0.8))' : 'none')
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.opacity = '1';
             e.currentTarget.style.transform = 'scale(1.3) rotate(15deg)';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.opacity = isHerMode ? '0.9' : '0.45';
+            e.currentTarget.style.opacity = isHerMode ? '0.9' : (timeRemaining.isUnlocked ? '0.85' : '0.5');
             e.currentTarget.style.transform = 'scale(1) rotate(0deg)';
           }}
         >
@@ -419,45 +479,121 @@ export default function EasterEggs() {
                     </p>
                   </div>
 
-                  <p
-                    className="font-serif"
-                    style={{
-                      fontSize: '1.05rem',
-                      color: 'var(--color-champagne)',
-                      fontStyle: 'italic',
-                      marginBottom: '20px'
-                    }}
-                  >
-                    Ippo sollu... Unmaiyana birthday celebration-ku maathava?
-                  </p>
+                  {/* Countdown Timer Display */}
+                  <CountdownTimer timeRemaining={timeRemaining} />
 
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    <button
-                      onClick={handleSwitchToHer}
-                      className="btn-primary btn-gold"
-                      style={{
-                        padding: '14px 20px',
-                        fontSize: '1.05rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '8px'
-                      }}
-                    >
-                      <span>🌸 Switch to Sri Dhanya Edition ✨</span>
-                    </button>
+                  {!timeRemaining.isUnlocked ? (
+                    <div>
+                      <div
+                        style={{
+                          background: 'rgba(216, 140, 154, 0.12)',
+                          border: '1px dashed rgba(212, 175, 55, 0.45)',
+                          borderRadius: '14px',
+                          padding: '12px 16px',
+                          marginBottom: '18px',
+                          textAlign: 'center'
+                        }}
+                      >
+                        <p
+                          className="font-serif"
+                          style={{
+                            fontSize: '1rem',
+                            color: 'var(--color-champagne)',
+                            fontStyle: 'italic',
+                            margin: 0,
+                            lineHeight: '1.5'
+                          }}
+                        >
+                          "Avasara padadha Mental! 😜 Unmaiyana celebration unlock aaga innum konjam neram irukku... Make a wish time (11:11 PM) vara varaikum Main Character roast-ah anubhavi!"
+                        </p>
+                      </div>
 
-                    <button
-                      onClick={() => setShowFlowerModal(false)}
-                      className="btn-secondary"
-                      style={{
-                        padding: '11px 18px',
-                        fontSize: '0.92rem'
-                      }}
-                    >
-                      😈 Irukkattum, let me roast you first! (Keep Current Mode)
-                    </button>
-                  </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                        <button
+                          onClick={() => {
+                            const pad = (n) => String(Math.max(0, n)).padStart(2, '0');
+                            setSwitchToast(`⏳ Locked! Unlocks strictly at 11:11 PM tonight, Mental! (${pad(timeRemaining.hours)}:${pad(timeRemaining.minutes)}:${pad(timeRemaining.seconds)} remaining) 😂`);
+                            setTimeout(() => setSwitchToast(null), 3500);
+                          }}
+                          style={{
+                            padding: '14px 20px',
+                            fontSize: '0.98rem',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '8px',
+                            opacity: 0.65,
+                            cursor: 'not-allowed',
+                            background: 'rgba(255, 255, 255, 0.05)',
+                            border: '1px solid rgba(246, 231, 200, 0.22)',
+                            color: 'rgba(246, 231, 200, 0.65)',
+                            borderRadius: '9999px',
+                            fontFamily: 'var(--font-serif)',
+                            width: '100%',
+                            transition: 'all 0.3s ease'
+                          }}
+                        >
+                          <Lock size={15} />
+                          <span>
+                            Locked until 11:11 PM ({String(timeRemaining.hours).padStart(2, '0')}:{String(timeRemaining.minutes).padStart(2, '0')}:{String(timeRemaining.seconds).padStart(2, '0')})
+                          </span>
+                        </button>
+
+                        <button
+                          onClick={() => setShowFlowerModal(false)}
+                          className="btn-secondary"
+                          style={{
+                            padding: '11px 18px',
+                            fontSize: '0.92rem'
+                          }}
+                        >
+                          😈 Seri seri, let me roast you till 11:11! (Close)
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <p
+                        className="font-serif"
+                        style={{
+                          fontSize: '1.05rem',
+                          color: 'var(--color-champagne)',
+                          fontStyle: 'italic',
+                          marginBottom: '20px'
+                        }}
+                      >
+                        ✨ 11:11 Cosmic Wish Hour Arrived!
+                      </p>
+
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                        <button
+                          onClick={handleSwitchToHer}
+                          className="btn-primary btn-gold"
+                          style={{
+                            padding: '14px 20px',
+                            fontSize: '1.05rem',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '8px'
+                          }}
+                        >
+                          <span>🌸 Switch to Sri Dhanya Edition ✨</span>
+                        </button>
+
+                        <button
+                          onClick={() => setShowFlowerModal(false)}
+                          className="btn-secondary"
+                          style={{
+                            padding: '11px 18px',
+                            fontSize: '0.92rem'
+                          }}
+                        >
+                          😈 Irukkattum, let me roast you first! (Keep Current Mode)
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ) : (
                 /* HER MODE ACTIVE: Show that she is celebrated, with option to switch back if wanted */

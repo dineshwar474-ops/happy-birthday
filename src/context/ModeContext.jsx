@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { isEditionUnlocked, getUnlockTargetDate } from '../utils/editionLock';
 
 const ModeContext = createContext();
 
@@ -8,7 +9,13 @@ export const MODES = {
 };
 
 export function ModeProvider({ children }) {
+  const [isUnlocked, setIsUnlocked] = useState(() => isEditionUnlocked());
+
   const [mode, setModeState] = useState(() => {
+    // If not yet unlocked (before 11:11 PM), force ME mode
+    if (!isEditionUnlocked()) {
+      return MODES.ME;
+    }
     try {
       const saved = localStorage.getItem('wish_site_mode');
       return saved === MODES.HER ? MODES.HER : MODES.ME;
@@ -17,23 +24,45 @@ export function ModeProvider({ children }) {
     }
   });
 
+  const unlockEdition = () => {
+    setIsUnlocked(true);
+    try {
+      localStorage.setItem('wish_edition_unlocked', 'true');
+    } catch {
+      // ignore
+    }
+  };
+
   const setMode = (newMode) => {
+    if (newMode === MODES.HER && !isUnlocked && !isEditionUnlocked()) {
+      console.warn("Sri Dhanya Edition is locked until 11:11 PM!");
+      return false;
+    }
     setModeState(newMode);
     try {
       localStorage.setItem('wish_site_mode', newMode);
     } catch {
       // ignore
     }
+    return true;
   };
 
   const toggleMode = () => {
-    setMode(mode === MODES.ME ? MODES.HER : MODES.ME);
+    if (mode === MODES.ME) {
+      if (!isUnlocked && !isEditionUnlocked()) {
+        return false;
+      }
+      setMode(MODES.HER);
+    } else {
+      setMode(MODES.ME);
+    }
+    return true;
   };
 
   const isHerMode = mode === MODES.HER;
 
   return (
-    <ModeContext.Provider value={{ mode, setMode, toggleMode, isHerMode }}>
+    <ModeContext.Provider value={{ mode, setMode, toggleMode, isHerMode, isUnlocked, unlockEdition, targetDate: getUnlockTargetDate() }}>
       {children}
     </ModeContext.Provider>
   );

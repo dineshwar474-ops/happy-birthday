@@ -12,6 +12,29 @@ export const CONFIG = {
   enableCreatorReveal: false,
   creatorSignature: "— someone who knows you a little too well (and has the scars from your face-slaps to prove it)",
   
+  // Sri Dhanya Edition Lock & Timer Configuration
+  editionUnlock: {
+    // 24-hour format: 23 = 11 PM, 11 = 11 minutes (Today at 11:11 PM)
+    // To change to 11:11 AM instead, change targetHour to 11
+    targetHour: 23,
+    targetMinute: 11,
+    targetSecond: 0,
+
+    // Optional specific ISO date/time override (e.g. "2026-10-03T23:11:00")
+    // Leave null to automatically lock till today at targetHour:targetMinute
+    customDateOverride: null,
+
+    // Set to true to bypass the lock for testing/previewing without waiting
+    // Can also be bypassed in browser via ?unlock=true
+    bypassLock: false,
+
+    // Teasing & dialog messages
+    lockTitle: "🔒 Sri Dhanya Edition is Locked!",
+    lockNotice: "Avasara padadha Mental! Unmaiyana birthday celebration 11:11 PM-ku dhaan unlock aagum! ⏳ Adhu varaikum Main Character roast-ah anubhavi! 😜",
+    lockedButtonText: "Locked until 11:11 PM",
+    unlockedButtonText: "🌸 Switch to Sri Dhanya Edition (Unlocked!) ✨"
+  },
+  
   // Easter egg hints / messages
   easterEggs: {
     moonClicksRequired: 3,
@@ -35,7 +58,7 @@ export const CONFIG = {
       
       // When already in Her mode
       activeHerTitle: "🌸 Sri Dhanya (Mental) Edition Active! ✨",
-      activeHerMessage: "Ippo website muzhuka unna pathi dhaan irukku! 💖\nVenumna marubadiyum main character mode-ku maathikalaam!",
+      activeHerMessage: "Mental!💖\nVenumna marubadiyum main character mode-ku maathikalaam!",
       switchToMeText: "👑 Switch to Main Character Roasting Mode",
       stayHerText: "Keep Sri Dhanya Edition 🌸"
     }
