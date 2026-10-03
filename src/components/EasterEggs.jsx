@@ -15,7 +15,9 @@ export default function EasterEggs() {
   const [floatingWord, setFloatingWord] = useState(null);
   const [switchToast, setSwitchToast] = useState(null);
 
-  // Live countdown timer running until today 11:11 PM
+  const timeDisplay = CONFIG.editionUnlock?.timeDisplay || '1:17 PM';
+
+  // Live countdown timer running until unlock time
   const timeRemaining = useEditionCountdown(() => {
     unlockEdition();
     confetti({
@@ -24,7 +26,7 @@ export default function EasterEggs() {
       origin: { y: 0.5 },
       colors: ['#D4AF37', '#F6E7C8', '#D88C9A', '#FFF8F1']
     });
-    setSwitchToast("✨ 11:11 PM has arrived! Sri Dhanya Edition is now unlocked! 🌸");
+    setSwitchToast(`✨ ${timeDisplay} has arrived! Sri Dhanya Edition is now unlocked! 🌸`);
     setTimeout(() => setSwitchToast(null), 5000);
   });
 
@@ -66,7 +68,7 @@ export default function EasterEggs() {
 
   const handleSwitchToHer = () => {
     if (!timeRemaining.isUnlocked) {
-      setSwitchToast("⏳ Locked! Sri Dhanya Edition strictly unlocks at 11:11 PM! 😜");
+      setSwitchToast(`⏳ Locked! Sri Dhanya Edition strictly unlocks at ${timeDisplay}! 😜`);
       setTimeout(() => setSwitchToast(null), 3500);
       return;
     }
@@ -199,72 +201,35 @@ export default function EasterEggs() {
         </button>
       </div>
 
-      {/* Easter Egg 3: Secret Flower near bottom right with 11:11 timer pill */}
+      {/* Easter Egg 3: Secret Flower near bottom right */}
       <div 
         style={{
           position: 'fixed',
           bottom: '16px',
           right: '16px',
-          zIndex: 80,
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px'
+          zIndex: 80
         }}
       >
-        {!isHerMode && !timeRemaining.isUnlocked && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            onClick={() => setShowFlowerModal(true)}
-            style={{
-              background: 'rgba(23, 15, 28, 0.85)',
-              border: '1px solid rgba(212, 175, 55, 0.4)',
-              backdropFilter: 'blur(8px)',
-              WebkitBackdropFilter: 'blur(8px)',
-              borderRadius: '16px',
-              padding: '4px 10px',
-              fontSize: '0.78rem',
-              color: 'var(--color-champagne)',
-              fontFamily: 'var(--font-sans)',
-              cursor: 'pointer',
-              boxShadow: '0 4px 16px rgba(0, 0, 0, 0.5)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '5px',
-              transition: 'all 0.3s ease'
-            }}
-            whileHover={{ scale: 1.05, borderColor: 'rgba(212, 175, 55, 0.8)' }}
-            title="Sri Dhanya Edition Unlocks at 11:11 PM"
-          >
-            <Clock size={12} style={{ color: 'var(--color-gold)' }} />
-            <span style={{ fontVariantNumeric: 'tabular-nums', fontWeight: 500, letterSpacing: '0.04em' }}>
-              11:11 ⏳
-            </span>
-          </motion.div>
-        )}
-
         <button
           onClick={() => setShowFlowerModal(true)}
           aria-label="A tiny secret flower"
-          title={isHerMode ? "Sri Dhanya Edition Active" : (timeRemaining.isUnlocked ? "Secret Flower: Sri Dhanya Edition Unlocked! 🌸" : "Secret Flower: Locked until 11:11 PM ⏳")}
+          title="A secret blossom..."
           style={{
             background: 'none',
             border: 'none',
             cursor: 'pointer',
-            opacity: isHerMode ? 0.9 : (timeRemaining.isUnlocked ? 0.85 : 0.5),
-            fontSize: isHerMode ? '18px' : '16px',
+            opacity: isHerMode ? 0.9 : 0.45,
+            fontSize: isHerMode ? '18px' : '15px',
             transition: 'all 0.3s ease',
             padding: '6px',
-            filter: isHerMode 
-              ? 'drop-shadow(0 0 8px rgba(216, 140, 154, 0.8))' 
-              : (timeRemaining.isUnlocked ? 'drop-shadow(0 0 8px rgba(212, 175, 55, 0.8))' : 'none')
+            filter: isHerMode ? 'drop-shadow(0 0 8px rgba(216, 140, 154, 0.8))' : 'none'
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.opacity = '1';
             e.currentTarget.style.transform = 'scale(1.3) rotate(15deg)';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.opacity = isHerMode ? '0.9' : (timeRemaining.isUnlocked ? '0.85' : '0.5');
+            e.currentTarget.style.opacity = isHerMode ? '0.9' : '0.45';
             e.currentTarget.style.transform = 'scale(1) rotate(0deg)';
           }}
         >
@@ -373,53 +338,67 @@ export default function EasterEggs() {
             style={{
               position: 'fixed',
               inset: 0,
-              backgroundColor: 'rgba(10, 5, 12, 0.85)',
+              backgroundColor: 'rgba(10, 5, 12, 0.88)',
               backdropFilter: 'blur(12px)',
               WebkitBackdropFilter: 'blur(12px)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               zIndex: 250,
-              padding: '20px'
+              padding: 'clamp(10px, 2.5vh, 20px) clamp(10px, 3vw, 16px)',
+              overflowY: 'auto'
             }}
             onClick={() => setShowFlowerModal(false)}
           >
             <motion.div
-              initial={{ scale: 0.85, opacity: 0, y: 25 }}
+              initial={{ scale: 0.88, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.85, opacity: 0, y: 20 }}
+              exit={{ scale: 0.88, opacity: 0, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="glass-panel"
+              className="glass-panel modal-scrollable"
               style={{
                 maxWidth: '480px',
                 width: '100%',
-                padding: 'clamp(28px, 5vw, 40px) clamp(20px, 4vw, 32px)',
+                maxHeight: 'min(90vh, calc(100dvh - 28px))',
+                overflowY: 'auto',
+                WebkitOverflowScrolling: 'touch',
+                padding: 'clamp(20px, 4vw, 32px) clamp(14px, 4vw, 24px)',
                 textAlign: 'center',
                 position: 'relative',
-                background: 'linear-gradient(175deg, rgba(42, 23, 42, 0.95) 0%, rgba(23, 15, 28, 0.98) 100%)',
+                background: 'linear-gradient(175deg, rgba(42, 23, 42, 0.97) 0%, rgba(23, 15, 28, 0.99) 100%)',
                 border: '1px solid rgba(216, 140, 154, 0.5)',
-                boxShadow: '0 20px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(216, 140, 154, 0.25)'
+                boxShadow: '0 20px 50px rgba(0, 0, 0, 0.75), 0 0 30px rgba(216, 140, 154, 0.25)',
+                borderRadius: '22px'
               }}
             >
-              {/* Close icon */}
+              {/* Sticky close icon */}
               <button
                 onClick={() => setShowFlowerModal(false)}
                 aria-label="Close"
                 style={{
-                  position: 'absolute',
-                  top: '14px',
-                  right: '14px',
-                  background: 'none',
-                  border: 'none',
+                  position: 'sticky',
+                  top: '0',
+                  float: 'right',
+                  marginTop: '-4px',
+                  marginRight: '-4px',
+                  zIndex: 20,
+                  background: 'rgba(23, 15, 28, 0.8)',
+                  border: '1px solid rgba(246, 231, 200, 0.25)',
+                  borderRadius: '50%',
                   color: 'var(--color-blush)',
                   cursor: 'pointer',
-                  padding: '6px'
+                  padding: '6px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backdropFilter: 'blur(8px)',
+                  transition: 'all 0.2s ease'
                 }}
               >
-                <X size={18} />
+                <X size={16} />
               </button>
 
-              <div style={{ fontSize: '2.5rem', marginBottom: '10px' }}>
+              <div style={{ fontSize: 'clamp(2rem, 5vw, 2.5rem)', marginBottom: '8px', clear: 'both' }}>
                 🌸
               </div>
 
@@ -429,12 +408,12 @@ export default function EasterEggs() {
                   <span
                     style={{
                       fontFamily: 'var(--font-sans)',
-                      fontSize: '0.8rem',
+                      fontSize: '0.75rem',
                       letterSpacing: '0.18em',
                       textTransform: 'uppercase',
                       color: 'var(--color-rose)',
                       display: 'block',
-                      marginBottom: '8px'
+                      marginBottom: '6px'
                     }}
                   >
                     ✦ Secret Flower Unlocked ✦
@@ -443,9 +422,9 @@ export default function EasterEggs() {
                   <h3
                     className="font-serif text-glow-rose"
                     style={{
-                      fontSize: 'clamp(1.5rem, 4vw, 2rem)',
+                      fontSize: 'clamp(1.35rem, 3.8vw, 1.85rem)',
                       color: 'var(--color-champagne)',
-                      marginBottom: '16px'
+                      marginBottom: '12px'
                     }}
                   >
                     {flowerDialog.title}
@@ -454,24 +433,24 @@ export default function EasterEggs() {
                   <div
                     className="font-serif"
                     style={{
-                      fontSize: 'clamp(1.05rem, 2.8vw, 1.22rem)',
-                      lineHeight: '1.7',
+                      fontSize: 'clamp(0.92rem, 2.6vw, 1.12rem)',
+                      lineHeight: '1.65',
                       color: 'var(--color-cream)',
                       textAlign: 'left',
-                      marginBottom: '20px',
-                      background: 'rgba(23, 15, 28, 0.6)',
-                      borderRadius: '16px',
-                      padding: '18px 20px',
+                      marginBottom: '14px',
+                      background: 'rgba(23, 15, 28, 0.65)',
+                      borderRadius: '14px',
+                      padding: '12px 14px',
                       border: '1px solid rgba(216, 140, 154, 0.25)'
                     }}
                   >
-                    <p style={{ marginBottom: '12px', color: 'var(--color-champagne)' }}>
+                    <p style={{ marginBottom: '8px', color: 'var(--color-champagne)' }}>
                       "Epudii Tension aaniya... <em>'Enoda birthday ku una pathiyeh potu vechurke'</em> nu tension aaniya? 😂"
                     </p>
-                    <p style={{ marginBottom: '12px' }}>
+                    <p style={{ marginBottom: '8px' }}>
                       "Adhu epudi una tension panama takkunu soliduvana! 😜"
                     </p>
-                    <p style={{ marginBottom: '12px', color: 'var(--color-blush)' }}>
+                    <p style={{ marginBottom: '8px', color: 'var(--color-blush)' }}>
                       "Enaku theriyum... <em>'Ne la veladradu oru TT, adhu pathi peethitu iruka'</em> nu nenachrupa... <em>'Ena da mental mari una pathiye peethirka'</em> nu nenachrupa thaane? 🏓😆"
                     </p>
                     <p style={{ fontStyle: 'italic', color: 'var(--color-gold)', margin: 0 }}>
@@ -488,36 +467,36 @@ export default function EasterEggs() {
                         style={{
                           background: 'rgba(216, 140, 154, 0.12)',
                           border: '1px dashed rgba(212, 175, 55, 0.45)',
-                          borderRadius: '14px',
-                          padding: '12px 16px',
-                          marginBottom: '18px',
+                          borderRadius: '12px',
+                          padding: '10px 12px',
+                          marginBottom: '14px',
                           textAlign: 'center'
                         }}
                       >
                         <p
                           className="font-serif"
                           style={{
-                            fontSize: '1rem',
+                            fontSize: 'clamp(0.88rem, 2.5vw, 0.96rem)',
                             color: 'var(--color-champagne)',
                             fontStyle: 'italic',
                             margin: 0,
-                            lineHeight: '1.5'
+                            lineHeight: '1.45'
                           }}
                         >
-                          "Avasara padadha Mental! 😜 Unmaiyana celebration unlock aaga innum konjam neram irukku... Make a wish time (11:11 PM) vara varaikum Main Character roast-ah anubhavi!"
+                          "Avasara padadha Mental! 😜 Unmaiyana celebration unlock aaga innum konjam neram irukku... Make a wish time ({timeDisplay}) vara varaikum Main Character roast-ah anubhavi!"
                         </p>
                       </div>
 
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                         <button
                           onClick={() => {
                             const pad = (n) => String(Math.max(0, n)).padStart(2, '0');
-                            setSwitchToast(`⏳ Locked! Unlocks strictly at 11:11 PM tonight, Mental! (${pad(timeRemaining.hours)}:${pad(timeRemaining.minutes)}:${pad(timeRemaining.seconds)} remaining) 😂`);
+                            setSwitchToast(`⏳ Locked! Unlocks strictly at ${timeDisplay} today, Mental! (${pad(timeRemaining.hours)}:${pad(timeRemaining.minutes)}:${pad(timeRemaining.seconds)} remaining) 😂`);
                             setTimeout(() => setSwitchToast(null), 3500);
                           }}
                           style={{
-                            padding: '14px 20px',
-                            fontSize: '0.98rem',
+                            padding: '12px 16px',
+                            fontSize: 'clamp(0.88rem, 2.5vw, 0.95rem)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -533,9 +512,9 @@ export default function EasterEggs() {
                             transition: 'all 0.3s ease'
                           }}
                         >
-                          <Lock size={15} />
+                          <Lock size={14} />
                           <span>
-                            Locked until 11:11 PM ({String(timeRemaining.hours).padStart(2, '0')}:{String(timeRemaining.minutes).padStart(2, '0')}:{String(timeRemaining.seconds).padStart(2, '0')})
+                            Locked until {timeDisplay} ({String(timeRemaining.hours).padStart(2, '0')}:{String(timeRemaining.minutes).padStart(2, '0')}:{String(timeRemaining.seconds).padStart(2, '0')})
                           </span>
                         </button>
 
@@ -543,11 +522,11 @@ export default function EasterEggs() {
                           onClick={() => setShowFlowerModal(false)}
                           className="btn-secondary"
                           style={{
-                            padding: '11px 18px',
-                            fontSize: '0.92rem'
+                            padding: '10px 16px',
+                            fontSize: '0.88rem'
                           }}
                         >
-                          😈 Seri seri, let me roast you till 11:11! (Close)
+                          😈 Seri seri, let me roast you till {timeDisplay}! (Close)
                         </button>
                       </div>
                     </div>
@@ -562,7 +541,7 @@ export default function EasterEggs() {
                           marginBottom: '20px'
                         }}
                       >
-                        ✨ 11:11 Cosmic Wish Hour Arrived!
+                        ✨ {timeDisplay} Arrived! Ippo sollu... Unmaiyana birthday celebration-ku maathava?
                       </p>
 
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>

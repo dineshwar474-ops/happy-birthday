@@ -43,21 +43,16 @@ export function isEditionUnlocked() {
     return true;
   }
 
-  // Check persistent unlock flag (once unlocked on this device, it stays unlocked)
-  if (typeof window !== 'undefined') {
-    try {
-      if (localStorage.getItem('wish_edition_unlocked') === 'true') {
-        return true;
-      }
-    } catch {
-      // ignore
-    }
+  const target = getUnlockTargetDate();
+  const targetTs = target.getTime();
+
+  // If the target is in the future, it is locked
+  if (Date.now() < targetTs) {
+    return false;
   }
 
-  const target = getUnlockTargetDate();
-  const unlocked = Date.now() >= target.getTime();
-
-  if (unlocked && typeof window !== 'undefined') {
+  // Target has arrived or passed
+  if (typeof window !== 'undefined') {
     try {
       localStorage.setItem('wish_edition_unlocked', 'true');
     } catch {
@@ -65,7 +60,7 @@ export function isEditionUnlocked() {
     }
   }
 
-  return unlocked;
+  return true;
 }
 
 /**

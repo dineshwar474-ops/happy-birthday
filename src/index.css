@@ -271,7 +271,7 @@ html, body {
   opacity: 0.8;
 }
 
-/* Custom Scrollbar for letter/cards */
+/* Custom Scrollbar for letter/cards & modals */
 ::-webkit-scrollbar {
   width: 5px;
 }
@@ -288,6 +288,27 @@ html, body {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(216, 140, 154, 0.6);
 }
+
+.modal-scrollable {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(212, 175, 55, 0.35) transparent;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+.modal-scrollable::-webkit-scrollbar {
+  width: 4px;
+}
+
+.modal-scrollable::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modal-scrollable::-webkit-scrollbar-thumb {
+  background: rgba(212, 175, 55, 0.3);
+  border-radius: 10px;
+}
+
 
 /* Accessibility / Reduced Motion */
 @media (prefers-reduced-motion: reduce) {

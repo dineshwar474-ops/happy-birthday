@@ -1,9 +1,11 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Lock, Sparkles, Clock } from 'lucide-react';
+import { CONFIG } from '../data/config.js';
 
 export default function CountdownTimer({ timeRemaining, compact = false }) {
   const { hours, minutes, seconds, isUnlocked } = timeRemaining;
+  const timeDisplay = CONFIG.editionUnlock?.timeDisplay || '1:17 PM';
 
   const pad = (n) => String(Math.max(0, n)).padStart(2, '0');
 
@@ -16,23 +18,23 @@ export default function CountdownTimer({ timeRemaining, compact = false }) {
           background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(246, 231, 200, 0.08))',
           border: '1px solid rgba(212, 175, 55, 0.6)',
           borderRadius: '16px',
-          padding: compact ? '10px 14px' : '16px 20px',
+          padding: compact ? '8px 12px' : '14px 18px',
           textAlign: 'center',
           boxShadow: '0 0 25px rgba(212, 175, 55, 0.25)',
-          margin: compact ? '0' : '16px 0'
+          margin: compact ? '0' : '14px 0'
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', color: 'var(--color-gold)' }}>
-          <Sparkles size={compact ? 16 : 20} />
+          <Sparkles size={compact ? 16 : 18} />
           <span
             className="font-serif text-glow-gold"
             style={{
-              fontSize: compact ? '0.95rem' : '1.15rem',
+              fontSize: compact ? '0.92rem' : '1.08rem',
               letterSpacing: '0.04em',
               fontWeight: 600
             }}
           >
-            11:11 Cosmic Wish Hour Arrived! ✦
+            {timeDisplay} Unlocked! Sri Dhanya Edition is Active ✦
           </span>
         </div>
       </motion.div>
@@ -53,7 +55,7 @@ export default function CountdownTimer({ timeRemaining, compact = false }) {
           alignItems: 'center',
           gap: '6px',
           fontFamily: 'var(--font-serif)',
-          fontSize: '0.95rem',
+          fontSize: '0.92rem',
           color: 'var(--color-champagne)'
         }}
       >
@@ -70,10 +72,10 @@ export default function CountdownTimer({ timeRemaining, compact = false }) {
       style={{
         background: 'rgba(23, 15, 28, 0.75)',
         border: '1px solid rgba(212, 175, 55, 0.35)',
-        boxShadow: '0 8px 30px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(212, 175, 55, 0.05)',
-        borderRadius: '18px',
-        padding: '16px 18px',
-        margin: '18px 0',
+        boxShadow: '0 8px 24px rgba(0, 0, 0, 0.5), inset 0 0 16px rgba(212, 175, 55, 0.05)',
+        borderRadius: '16px',
+        padding: 'clamp(10px, 2.5vw, 14px) clamp(10px, 3vw, 16px)',
+        margin: '14px 0',
         textAlign: 'center'
       }}
     >
@@ -82,17 +84,17 @@ export default function CountdownTimer({ timeRemaining, compact = false }) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: '7px',
-          marginBottom: '12px',
+          gap: '6px',
+          marginBottom: '10px',
           color: 'var(--color-gold)',
-          fontSize: '0.8rem',
+          fontSize: 'clamp(0.72rem, 2.2vw, 0.8rem)',
           fontFamily: 'var(--font-sans)',
-          letterSpacing: '0.14em',
+          letterSpacing: '0.12em',
           textTransform: 'uppercase'
         }}
       >
-        <Lock size={14} />
-        <span>Sri Dhanya Edition Unlocks at 11:11 PM</span>
+        <Lock size={13} />
+        <span>Sri Dhanya Edition Unlocks at {timeDisplay}</span>
       </div>
 
       <div
@@ -100,7 +102,7 @@ export default function CountdownTimer({ timeRemaining, compact = false }) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: 'clamp(8px, 2.5vw, 14px)'
+          gap: 'clamp(6px, 2vw, 12px)'
         }}
       >
         {units.map((unit, index) => (
@@ -110,22 +112,23 @@ export default function CountdownTimer({ timeRemaining, compact = false }) {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                minWidth: 'clamp(58px, 15vw, 76px)'
+                minWidth: 'clamp(52px, 18vw, 68px)',
+                flex: '1 1 0'
               }}
             >
               <div
                 style={{
                   background: 'rgba(42, 23, 42, 0.85)',
                   border: '1px solid rgba(246, 231, 200, 0.28)',
-                  borderRadius: '12px',
+                  borderRadius: '10px',
                   width: '100%',
-                  padding: '8px 0',
-                  boxShadow: '0 4px 15px rgba(0, 0, 0, 0.3)',
+                  padding: '6px 0',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
                   position: 'relative',
                   overflow: 'hidden'
                 }}
               >
-                {/* Subtle sheen highlight */}
+                {/* Sheen reflection */}
                 <div
                   style={{
                     position: 'absolute',
@@ -140,7 +143,7 @@ export default function CountdownTimer({ timeRemaining, compact = false }) {
                 <span
                   className="font-serif text-glow-gold"
                   style={{
-                    fontSize: 'clamp(1.6rem, 5vw, 2.3rem)',
+                    fontSize: 'clamp(1.45rem, 5vw, 2.1rem)',
                     fontWeight: 600,
                     color: 'var(--color-champagne)',
                     lineHeight: 1,
@@ -154,10 +157,10 @@ export default function CountdownTimer({ timeRemaining, compact = false }) {
               <span
                 style={{
                   fontFamily: 'var(--font-sans)',
-                  fontSize: '0.68rem',
-                  letterSpacing: '0.16em',
+                  fontSize: 'clamp(0.6rem, 1.8vw, 0.68rem)',
+                  letterSpacing: '0.14em',
                   color: 'var(--color-rose)',
-                  marginTop: '6px',
+                  marginTop: '5px',
                   fontWeight: 500
                 }}
               >
@@ -169,9 +172,9 @@ export default function CountdownTimer({ timeRemaining, compact = false }) {
               <span
                 style={{
                   fontFamily: 'var(--font-serif)',
-                  fontSize: 'clamp(1.5rem, 4vw, 2rem)',
+                  fontSize: 'clamp(1.2rem, 3.5vw, 1.6rem)',
                   color: 'var(--color-gold)',
-                  marginBottom: '20px',
+                  marginBottom: '16px',
                   opacity: 0.75,
                   animation: 'pulse 1.5s ease-in-out infinite'
                 }}
@@ -186,15 +189,15 @@ export default function CountdownTimer({ timeRemaining, compact = false }) {
       <p
         className="font-serif"
         style={{
-          fontSize: '0.88rem',
+          fontSize: 'clamp(0.78rem, 2.3vw, 0.85rem)',
           fontStyle: 'italic',
           color: 'var(--color-blush)',
-          marginTop: '12px',
+          marginTop: '10px',
           opacity: 0.9,
-          lineHeight: '1.4'
+          lineHeight: '1.3'
         }}
       >
-        Make a Wish Hour • Strict Cosmic Protocol Active ⏳
+        Make a Wish Hour • Cosmic Lock Active ⏳
       </p>
     </div>
   );

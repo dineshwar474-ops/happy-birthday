@@ -14,13 +14,13 @@ export const CONFIG = {
   
   // Sri Dhanya Edition Lock & Timer Configuration
   editionUnlock: {
-    // 24-hour format: 23 = 11 PM, 11 = 11 minutes (Today at 11:11 PM)
-    // To change to 11:11 AM instead, change targetHour to 11
-    targetHour: 23,
-    targetMinute: 11,
+    // 24-hour format: 13 = 1 PM, 17 = 17 minutes (Today at 1:17 PM)
+    targetHour: 13,
+    targetMinute: 23,
     targetSecond: 0,
+    timeDisplay: "1:17 PM",
 
-    // Optional specific ISO date/time override (e.g. "2026-10-03T23:11:00")
+    // Optional specific ISO date/time override (e.g. "2026-10-03T13:17:00")
     // Leave null to automatically lock till today at targetHour:targetMinute
     customDateOverride: null,
 
@@ -30,8 +30,8 @@ export const CONFIG = {
 
     // Teasing & dialog messages
     lockTitle: "🔒 Sri Dhanya Edition is Locked!",
-    lockNotice: "Avasara padadha Mental! Unmaiyana birthday celebration 11:11 PM-ku dhaan unlock aagum! ⏳ Adhu varaikum Main Character roast-ah anubhavi! 😜",
-    lockedButtonText: "Locked until 11:11 PM",
+    lockNotice: "Avasara padadha Mental! Unmaiyana birthday celebration 1:17 PM-ku dhaan unlock aagum! ⏳ Adhu varaikum Main Character roast-ah anubhavi! 😜",
+    lockedButtonText: "Locked until 1:17 PM",
     unlockedButtonText: "🌸 Switch to Sri Dhanya Edition (Unlocked!) ✨"
   },
   
