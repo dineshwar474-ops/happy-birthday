@@ -28,7 +28,7 @@ export const CONFIG = {
     // Can also be bypassed in browser via ?unlock=true
     bypassLock: false,
 
-    // Teasing & dialog messages
+    // Teasing & dialog messages 
     lockTitle: "🔒 Sri Dhanya Edition is Locked!",
     lockNotice: "Avasara padadha Mental! Unmaiyana birthday celebration 7:30 PM-ku dhaan unlock aagum! ⏳ Adhu varaikum Main Character roast-ah anubhavi! 😜",
     lockedButtonText: "Locked until 7:30 PM",
